@@ -20,29 +20,43 @@ var places = {
   features: [{
     type: 'Feature',
     geometry: {type: 'Point', coordinates: [-75.6879, 45.4149]},
-    properties: {name: 'El Camino'}
+    properties: {name: 'El Camino', category: 'restaurant'}
   }, {
     type: 'Feature',
     geometry: {type: 'Point', coordinates: [-75.688577, 45.413891]},
-    properties: {name: 'Nature Museum'}
+    properties: {name: 'Nature Museum', category: 'museum'}
   }, {
     type: 'Feature',
     geometry: {type: 'Point', coordinates: [-75.691868, 45.427893]},
-    properties: {name: 'Cacao 70'}
+    properties: {name: 'Cacao 70', category: 'restaurant'}
   }, {
     type: 'Feature',
     geometry: {type: 'Point', coordinates: [-75.691273, 45.422303]},
-    properties: {name: 'Ottawa City Hall'}
+    properties: {name: 'Ottawa City Hall', category: 'restaurant'}
   }, {
     type: 'Feature',
     geometry: {type: 'Point', coordinates: [-75.692169, 45.428032]},
-    properties: {name: 'Vittoria Trattoria'}
+    properties: {name: 'Vittoria Trattoria', category: 'restaurant'}
   }]
 };
 
-var viewModel = {
-  placeContainer: ko.observableArray(places.features)
+var viewModel = function(){
+  var self = this;
+  self.points = ko.observableArray(places.features);
+
+  self.query = ko.observable('');
+
+  self.search = ko.computed(function(){
+    return ko.utils.arrayFilter(self.points(), function(point){
+      return point.properties.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
+
+    });
+  });
+
 }
 
-ko.applyBindings(viewModel);
+ko.applyBindings(viewModel());
+
+
+
 

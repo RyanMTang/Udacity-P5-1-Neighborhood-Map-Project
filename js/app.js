@@ -39,3 +39,10 @@ var places = {
     properties: {name: 'Vittoria Trattoria'}
   }]
 };
+
+var viewModel = {
+  placeContainer: ko.observableArray(places.features)
+}
+
+ko.applyBindings(viewModel);
+

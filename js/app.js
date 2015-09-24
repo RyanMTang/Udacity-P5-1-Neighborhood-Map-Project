@@ -31,7 +31,7 @@ var viewModel = function(){
   
   function clearMarkers(){
     for (var i=0; i<markers.length; i++) {
-      if (markers[i].title.toLowerCase().index(self.userInput()) >=0) {
+      if (markers[i].title.toLowerCase().index(self.userInput()) ===-1) {
         markers[i].setMap(null);
       }
     }

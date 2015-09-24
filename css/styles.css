@@ -1,2 +1,27 @@
 html, body { height: 100%; margin: 0; padding: 0; }
-  #map { height: 100%; }
+
+#map { 
+	height: 100%;
+	width: 90%;
+	float: right; 
+}
+
+#pac-input {
+	width: 9.5%;
+	height: 30px;
+	vertical-align: top;
+	float: left;
+
+}
+
+ #pac-input:focus {
+ 	border-color: #4d90fe;
+}
+
+#listView {
+	float:left;
+}
+
+li {
+	color: #000;
+}

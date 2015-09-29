@@ -1,5 +1,7 @@
 var infowindow = new google.maps.InfoWindow();
-var markerList = [];
+var marker;
+var markerList = ko.observableArray([]);
+var windowContent;
 var viewModel = function(){
   var self = this;
   var infowindow = new google.maps.InfoWindow();
@@ -9,7 +11,7 @@ var viewModel = function(){
     zoom: 15
   });
 
-  var Point = function (map, name, lat, lon, id) {
+  var Point = function (map, name, lat, lon, id, marker) {
     var marker;
     var markerLat = lat;
     var markerLon = lon;
@@ -19,14 +21,15 @@ var viewModel = function(){
     this.lat  = ko.observable(lat);
     this.lon  = ko.observable(lon);
     this.id = ko.observable(id);
+    this.marker = ko.observable(marker);
 
     marker = new google.maps.Marker({
       position: new google.maps.LatLng(lat, lon),
-      animation: google.maps.Animation.DROP
+      animation: google.maps.Animation.DROP,
+      name: markerName
     });
 
     markerList.push(marker);
-
 
     this.isVisible = ko.observable(false);
 
@@ -56,24 +59,26 @@ var viewModel = function(){
                       var venueName = venue.name;
                       var venuePhone = venue.contact.formattedPhone;
                       var venueAddress = venue.location.formattedAddress;
-                      infowindow.setContent('<p>' + venueName + '</p>' + '<p>' + venuePhone + '</p>' + '<p>' + venueAddress + '</p>')
+                      var windowContent ='<p>' + venueName + '</p>' + '<p>' + venuePhone + '</p>' + '<p>' + venueAddress + '</p>'
+                      infowindow.setContent(windowContent);
           
-                  });
+                  });//end of .getJSON
 
 
-                // set info window with a title and open the info window
-                //infowindow.setTitle(marker.title);
+                // open infowindow and pan to clicked marker
                 map.panTo(marker.getPosition());
-                infowindow.open(map, marker);   
-                markerList.push(marker);       
+                infowindow.open(map, marker);        
 
-            };
-        })(marker));
-  
-  }
+            }; //end of return function()
+        })(marker)); //end of event listener
 
+  } //end of Point function
 
-
+  self.goToMarker = function(clicked){
+      var pos = self.points().indexOf(this);
+      console.log(pos);
+      google.maps.event.trigger(markerList()[pos], 'click');
+    }
 
   self.query = ko.observable('');
   

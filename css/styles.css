@@ -18,10 +18,11 @@ html, body { height: 100%; margin: 0; padding: 0; }
  	border-color: #4d90fe;
 }
 
-#listView {
+.listView {
 	float:left;
 }
 
 li {
 	color: #000;
+	margin-bottom: 50px;
 }

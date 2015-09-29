@@ -9,9 +9,11 @@
 	<body>
 		<input type="text" name="search" id="pac-input" class="controls" placeholder="Search Box" data-bind="value: query, valueUpdate: 'keyup'">
 		<div id="map"></div>
-		<div id="listView">
-			<ul data-bind="foreach: filterPoints">
-				<li data-bind="text: name"></li>
+		<div class="listView">
+			<ul id="list" data-bind="foreach: filterPoints">
+				<li id ="listItem" data-bind= "click: goToMarker">
+					<h4 data-bind="text:name"></h4>
+				</li>
 			</ul>
 		</div>
 		<script src="https://maps.googleapis.com/maps/api/js"></script>

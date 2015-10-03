@@ -2,7 +2,6 @@ var infowindow = new google.maps.InfoWindow();
 var marker;
 var markerList = ko.observableArray([]);
 var windowContent;
-var center;
 //Start viewModel
 var viewModel = function(){
   var self = this;
@@ -119,7 +118,7 @@ var viewModel = function(){
         point.isVisible(doesMatch);
         return doesMatch;
     });
-  });
+  }); //End self.filterPoints
   
 
 }

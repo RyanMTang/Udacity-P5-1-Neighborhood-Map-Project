@@ -7,14 +7,16 @@
 		<link rel="stylesheet" href="css/styles.css">
 	</head>
 	<body>
-		<input type="text" name="search" id="pac-input" class="controls" placeholder="Search Box" data-bind="value: query, valueUpdate: 'keyup'">
 		<div id="map"></div>
-		<div class="listView">
-			<ul id="list" data-bind="foreach: filterPoints">
-				<li id ="listItem" data-bind= "click: goToMarker">
-					<h4 data-bind="text:name"></h4>
-				</li>
-			</ul>
+		<div id = "sidebar">
+			<input type="text" name="search" id="pac-input" class="controls" placeholder="Filter results by name" data-bind="value: query, valueUpdate: 'keyup'">
+			<div class="listView">
+				<ul id="list" data-bind="foreach: filterPoints">
+					<li id ="listItem" data-bind= "click: listClick">
+						<h4 data-bind="text:name"></h4>
+					</li>
+				</ul>
+			</div>
 		</div>
 		<script src="https://maps.googleapis.com/maps/api/js"></script>
 		<script src="js/lib/jquery.min.js"></script>

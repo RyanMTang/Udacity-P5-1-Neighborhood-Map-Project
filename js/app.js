@@ -14,11 +14,10 @@ var viewModel = function(){
     zoom: 12,
     scrollWheel: false
   });
-
+  var center = self.Map.getCenter();
   //Map resizes and centers when the window is resized
   google.maps.event.addDomListener(window, "resize", function() {
-    var center = self.Map.getCenter();
-    google.maps.event.trigger(map, "resize");
+    google.maps.event.trigger(self.Map, "resize");
     self.Map.setCenter(center); 
   });
 
@@ -119,7 +118,41 @@ var viewModel = function(){
         return doesMatch;
     });
   }); //End self.filterPoints
-  
+
+  //The values from the drop down menu
+  self.selected = ko.observable('');
+
+  //Clears all markers off the map
+  function clearOverlays() {
+      for (var i = 0; i < markerList().length; i++ ) {
+      markerList()[i].setMap(null);
+    }
+  }
+
+  //Pulls up the info window for the point selected in the drop down menu
+  //Puts the markers back on the map if the drop down menu value is null
+  self.onChange = function() {
+      var position = self.points().indexOf(self.selected()); 
+      if (self.selected()==null) {
+
+        for (var i = 0; i < markerList().length; i++ ) {
+        markerList()[i].setMap(self.Map);
+        infowindow.close(self.Map, markerList()[i]);
+        self.Map.setCenter(center); 
+        }
+        return;
+      }
+      clearOverlays();
+      markerList()[position].setMap(self.Map);
+      google.maps.event.trigger(markerList()[position], 'click'); 
+  };
+
+  //Reset button that sets the value for the drop down menu to null
+  self.resetSelection = function () {
+    self.selected(null);
+  }
+
+
 
 }
 ko.applyBindings(viewModel);

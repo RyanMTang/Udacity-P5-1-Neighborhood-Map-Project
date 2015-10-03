@@ -17,6 +17,10 @@
 					</li>
 				</ul>
 			</div>
+			<div id="dropDownMenu">
+				<select data-bind="options: points, optionsText: 'name', value: selected, optionsCaption: 'Select a location', event: {change: onChange}"></select>
+				<button data-bind="click: resetSelection">Reset</button>
+			</div>
 		</div>
 		<script src="https://maps.googleapis.com/maps/api/js"></script>
 		<script src="js/lib/jquery.min.js"></script>

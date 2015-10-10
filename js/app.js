@@ -1,15 +1,13 @@
-var infowindow = new google.maps.InfoWindow();
+var infowindow;
 var marker;
 var markerList = ko.observableArray([]);
 var windowContent;
-//Start viewModel
-var viewModel = function(){
-  var self = this;
+var filterPoints;
+var points = ko.observableArray([]);
 
-  var infowindow = new google.maps.InfoWindow();
-
-//Create map and set initial coordinates and zoom level
-  self.Map = new google.maps.Map(document.getElementById('map'), {
+function initMap(){
+  //Create map and set initial coordinates and zoom level
+  this.Map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 45.4214, lng: -75.6919},
     zoom: 12,
     scrollWheel: false
@@ -21,7 +19,8 @@ var viewModel = function(){
     self.Map.setCenter(center); 
   });
 
-//Function for creating points at different locations on the map
+  var infowindow = new google.maps.InfoWindow();
+  //Function for creating points at different locations on the map
   var Point = function (map, name, lat, lon, id, marker) {
     var marker;
     var markerLat = lat;
@@ -89,35 +88,43 @@ var viewModel = function(){
 
   } //End of Point function
 
+   //Model with all points
+  this.points = ko.observableArray ([
+  new Point(this.Map, 'El Camino', 45.415597, -75.688027),
+  new Point(this.Map, 'Nature Museum', 45.412999, -75.688523),
+  new Point(this.Map, 'Shawarma Palace', 45.431761, -75.679836),
+  new Point(this.Map, 'The Horn of Africa', 45.432591, -75.676121),
+  new Point(this.Map, 'Ottawa City Hall', 45.443206, -75.659874),
+  new Point(this.Map, 'Canadian War Museum', 45.417355, -75.716931)
+  ]);
+};
+
+//Start viewModel
+var viewModel = function(){
+  var self = this;
+
   //Triggers marker click when corresponding list item is clicked
   self.listClick = function(clicked){
-      var pos = self.points().indexOf(this);
+      var pos = points().indexOf(this);
       google.maps.event.trigger(markerList()[pos], 'click');
     }
 
-  self.query = ko.observable('');
-
-  //Model with all points
-  self.points = ko.observableArray ([
-  new Point(self.Map, 'El Camino', 45.415597, -75.688027),
-  new Point(self.Map, 'Nature Museum', 45.412999, -75.688523),
-  new Point(self.Map, 'Shawarma Palace', 45.431761, -75.679836),
-  new Point(self.Map, 'The Horn of Africa', 45.432591, -75.676121),
-  new Point(self.Map, 'Ottawa City Hall', 45.443206, -75.659874),
-  new Point(self.Map, 'Canadian War Museum', 45.417355, -75.716931)
-  ]);
+ self.query = ko.observable('');
 
   //Filters list items and markers based on user input in the search bar
   self.filterPoints = ko.computed(function () {
+    console.log('hi');
     var search  = self.query().toLowerCase();
 
-    return ko.utils.arrayFilter(self.points(), function (point) {
+
+    return ko.utils.arrayFilter(this.points(), function (point) {
         var doesMatch = point.name().toLowerCase().indexOf(search) >= 0;
 
         point.isVisible(doesMatch);
         return doesMatch;
     });
-  }); //End self.filterPoints
+  });
+  //End self.filterPoints
 
   //The values from the drop down menu
   self.selected = ko.observable('');
@@ -132,7 +139,7 @@ var viewModel = function(){
   //Pulls up the info window for the point selected in the drop down menu
   //Puts the markers back on the map if the drop down menu value is null
   self.onChange = function() {
-      var position = self.points().indexOf(self.selected()); 
+      var position = this.points().indexOf(self.selected()); 
       if (self.selected()==null) {
 
         for (var i = 0; i < markerList().length; i++ ) {

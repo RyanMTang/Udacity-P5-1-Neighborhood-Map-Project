@@ -105,7 +105,7 @@ var viewModel = function(){
 
   //Triggers marker click when corresponding list item is clicked
   self.listClick = function(clicked){
-      var pos = points().indexOf(this);
+      var pos = markerList().indexOf(this);
       google.maps.event.trigger(markerList()[pos], 'click');
     }
 

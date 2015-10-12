@@ -13,19 +13,43 @@ html, body {
 	max-width: 100%;
 }
 
+
 #pac-input {
-	display: none;
+	position: absolute;
+	top: 10px;
+	left: 40%;
+	height: 30px;
+	padding-left: 5px;
+	width: 40%;
+}
+
+#list {
+		padding-left: 0;
+		margin-bottom: 0;
+		display: block;
+	}
+
+li {
+		color: #fff;
+		list-style: none;
+	  	border-bottom: 1px solid gray;
+	  	width: 85%;
+	  	font-size: 0.7em;
+	  	padding-left: 8px;
 }
 
 .listView {
-	display: none;
-}
+		display: inline-block;
+	  	width: 20%;
+		position: absolute;
+		top: 50px;
+		left: 10px;
+		background-color: #000;
+		opacity: 0.7;
+		cursor: pointer;
+		display: block;
+	}
 
-#dropDownMenu {
-	position: absolute;
-	top: 10px;
-	left: 120px;
-}
 
 /*********************************************
 	TABLET VIEW
@@ -39,7 +63,6 @@ html, body {
 		position: absolute;
 		top: 50px;
 		left: 10px;
-		height: 30px;
 		padding-left: 7px;
 		font-size: 0.7em;
 	}
@@ -51,7 +74,6 @@ html, body {
 	#list {
 		padding-left: 0;
 		margin-bottom: 0;
-		display: block;
 	}
 
 	li {
@@ -71,12 +93,8 @@ html, body {
 		background-color: #000;
 		opacity: 0.7;
 		cursor: pointer;
-		display: block;
 	}
 
-	#dropDownMenu {
-		display: none;
-	}
 }
 
 /*********************************************
@@ -90,7 +108,6 @@ html, body {
 		position: absolute;
 		top: 50px;
 		left: 10px;
-		height: 30px;
 		padding-left: 10px;
 		font-size: 1em;
 	}
@@ -102,7 +119,6 @@ html, body {
 	#list {
 		padding-left: 0;
 		margin-bottom: 0;
-		display: block;
 	}
 
 	li {
@@ -122,11 +138,6 @@ html, body {
 		background-color: #000;
 		opacity: 0.7;
 		cursor: pointer;
-		display: block;
-	}
-
-	#dropDownMenu {
-		display: none;
 	}
  
 }

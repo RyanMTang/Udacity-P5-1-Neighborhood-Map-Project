@@ -89,7 +89,7 @@ function initMap(){
   } //End of Point function
 
    //Model with all points
-  this.points = ko.observableArray ([
+  points = ko.observableArray ([
   new Point(this.Map, 'El Camino', 45.415597, -75.688027),
   new Point(this.Map, 'Nature Museum', 45.412999, -75.688523),
   new Point(this.Map, 'Shawarma Palace', 45.431761, -75.679836),
@@ -113,51 +113,19 @@ var viewModel = function(){
 
   //Filters list items and markers based on user input in the search bar
   self.filterPoints = ko.computed(function () {
-    console.log('hi');
     var search  = self.query().toLowerCase();
-
-
-    return ko.utils.arrayFilter(this.points(), function (point) {
+    if (!search) {
+      return markerList();
+    } else {
+    return ko.utils.arrayFilter(points(), function (point) {
         var doesMatch = point.name().toLowerCase().indexOf(search) >= 0;
 
         point.isVisible(doesMatch);
         return doesMatch;
-    });
+      });
+    }
   });
   //End self.filterPoints
-
-  //The values from the drop down menu
-  self.selected = ko.observable('');
-
-  //Clears all markers off the map
-  function clearOverlays() {
-      for (var i = 0; i < markerList().length; i++ ) {
-      markerList()[i].setMap(null);
-    }
-  }
-
-  //Pulls up the info window for the point selected in the drop down menu
-  //Puts the markers back on the map if the drop down menu value is null
-  self.onChange = function() {
-      var position = this.points().indexOf(self.selected()); 
-      if (self.selected()==null) {
-
-        for (var i = 0; i < markerList().length; i++ ) {
-        markerList()[i].setMap(self.Map);
-        infowindow.close(self.Map, markerList()[i]);
-        self.Map.setCenter(center); 
-        }
-        return;
-      }
-      clearOverlays();
-      markerList()[position].setMap(self.Map);
-      google.maps.event.trigger(markerList()[position], 'click'); 
-  };
-
-  //Reset button that sets the value for the drop down menu to null
-  self.resetSelection = function () {
-    self.selected(null);
-  }
 
 
 

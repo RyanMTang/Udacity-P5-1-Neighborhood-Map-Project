@@ -17,7 +17,6 @@ function initMap(){
   this.infowindow = new google.maps.InfoWindow();
   //Function for creating points at different locations on the map
   var Point = function (map, name, lat, lon, id, marker) {
-    var marker;
     var markerLat = lat;
     var markerLon = lon;
     var markerName = name;
@@ -85,7 +84,7 @@ function initMap(){
   new Point(this.Map, 'Ottawa City Hall', 45.443206, -75.659874),
   new Point(this.Map, 'Canadian War Museum', 45.417355, -75.716931)
   ]);
-};
+}
 
 //Start viewModel
 var viewModel = function(){
@@ -122,5 +121,5 @@ var viewModel = function(){
   });
   //End self.filterPoints
 
-}
+};
 ko.applyBindings(viewModel);

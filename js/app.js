@@ -59,34 +59,42 @@ function initMap(){
     google.maps.event.addListener(marker, 'click', (function(marker)  {
             return function() {
 
-                var url = 'https://api.foursquare.com/v2/venues/search'+
+              $.ajax({
+                url: 'https://api.foursquare.com/v2/venues/search'+
                   '?client_id=PRENND0ZKZI4DRHMGHP5GMBASHGUI5FYL2R53VK5J5VVGQCB'+
                   '&client_secret=VHTNW4NDFQSZACFPINV0OC2YEWAISSPXTOHY1UIOZIFVGDLO'+
                   '&v=20130815'+
                   '&ll=' + markerLat + ',' + markerLon +
-                  '&query=' + markerName;
-
-                  $.getJSON(url, function(response){
+                  '&query=' + markerName,
+                dataType: 'json',
+                success: function(response) {
                       var venue = response.response.venues[0];
                       var venueName = venue.name;
                       var venuePhone = venue.contact.formattedPhone;
                       var venueAddress = venue.location.formattedAddress;
-                      var windowContent ='<p>' + venueName + '</p>' + '<p>' + venuePhone + '</p>' + '<p>' + venueAddress + '</p>'
+                      var windowContent ='<p>' + venueName + '</p>' + '<p>' + venuePhone + '</p>' + '<p>' + venueAddress + '</p>';
                       infowindow.setContent(windowContent);
-          
-                  });//End of .getJSON
+                },
+                error: function(){
+                  alert('Unable to retrieve Fourquare data');
+                }
+
+              });
+
+                
+
 
 
                 //Open infowindow and pan to clicked marker
                 marker.setAnimation(google.maps.Animation.BOUNCE); //Makes marker bounce
-                setTimeout(function(){marker.setAnimation(null); }, 750) //Makes marker stop bouncing after one bounce
+                setTimeout(function(){marker.setAnimation(null); }, 750); //Makes marker stop bouncing after one bounce
                 map.panTo(marker.getPosition());
                 infowindow.open(map, marker);        
 
             }; //End of return function()
         })(marker)); //End of click event listener
 
-  } //End of Point function
+  }; //End of Point function
 
    //Model with all points
   points = ko.observableArray ([
@@ -107,7 +115,7 @@ var viewModel = function(){
   self.listClick = function(clicked){
       var pos = markerList().indexOf(this);
       google.maps.event.trigger(markerList()[pos], 'click');
-    }
+    };
 
  self.query = ko.observable('');
 
@@ -126,8 +134,6 @@ var viewModel = function(){
     }
   });
   //End self.filterPoints
-
-
 
 }
 ko.applyBindings(viewModel);

@@ -54,7 +54,8 @@ function initMap(){
                       var venueName = venue.name;
                       var venuePhone = venue.contact.formattedPhone;
                       var venueAddress = venue.location.formattedAddress;
-                      var windowContent ='<p>' + venueName + '</p>' + '<p>' + venuePhone + '</p>' + '<p>' + venueAddress + '</p>';
+                      var venueId = venue.id;
+                      var windowContent ='<div id="window">' + '<a href="https://foursquare.com/v/' + venueId + '">' + venueName + '</a>' + '<p>' + venuePhone + '</p>' + '<p>' + venueAddress + '</p>'+'</div>';
                       infowindow.setContent(windowContent);
                 },
                 error: function(){
@@ -62,10 +63,7 @@ function initMap(){
                 }
 
               });
-
-                
-
-
+                          
 
                 //Open infowindow and pan to clicked marker
                 marker.setAnimation(google.maps.Animation.BOUNCE); //Makes marker bounce

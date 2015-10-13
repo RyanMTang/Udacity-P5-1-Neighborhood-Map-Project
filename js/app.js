@@ -1,16 +1,11 @@
-var infowindow;
-var marker;
+
 var markerList = ko.observableArray([]);
-var windowContent;
-var filterPoints;
-var points = ko.observableArray([]);
 
 function initMap(){
   //Create map and set initial coordinates and zoom level
   this.Map = new google.maps.Map(document.getElementById('map'), {
     center: {lat: 45.4214, lng: -75.6919},
     zoom: 12,
-    scrollWheel: false
   });
   var center = self.Map.getCenter();
   //Map resizes and centers when the window is resized
@@ -19,7 +14,7 @@ function initMap(){
     self.Map.setCenter(center); 
   });
 
-  var infowindow = new google.maps.InfoWindow();
+  this.infowindow = new google.maps.InfoWindow();
   //Function for creating points at different locations on the map
   var Point = function (map, name, lat, lon, id, marker) {
     var marker;
@@ -41,19 +36,6 @@ function initMap(){
 
     //Pushes marker into an observable array
     markerList.push(marker);
-
-    this.isVisible = ko.observable(false);
-
-    //Determines whether or not marker appears on the map
-    this.isVisible.subscribe(function(currentState) {
-      if (currentState) {
-        marker.setMap(map);
-      } else {
-        marker.setMap(null);
-      }
-    });
-
-    this.isVisible(true);
 
     //Fetches information from foursquare on marker click
     google.maps.event.addListener(marker, 'click', (function(marker)  {
@@ -117,18 +99,25 @@ var viewModel = function(){
       google.maps.event.trigger(markerList()[pos], 'click');
     };
 
- self.query = ko.observable('');
+  self.query = ko.observable('');
 
   //Filters list items and markers based on user input in the search bar
   self.filterPoints = ko.computed(function () {
     var search  = self.query().toLowerCase();
     if (!search) {
+      for (i=0; i<markerList().length; i++) {
+        markerList()[i].setMap(this.Map);
+        infowindow.close(this.Map);
+      }
       return markerList();
     } else {
-    return ko.utils.arrayFilter(points(), function (point) {
-        var doesMatch = point.name().toLowerCase().indexOf(search) >= 0;
-
-        point.isVisible(doesMatch);
+    return ko.utils.arrayFilter(markerList(), function (marker) {
+        var doesMatch = marker.name.toLowerCase().indexOf(search) >= 0;
+        if (doesMatch){
+          marker.setMap(this.Map);
+        } else {
+          marker.setMap(null);
+        }
         return doesMatch;
       });
     }

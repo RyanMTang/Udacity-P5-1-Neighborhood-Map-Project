@@ -11,11 +11,15 @@
 		<div id = "sidebar">
 			<input type="text" name="search" id="pac-input" class="controls" placeholder="Filter results by name" data-bind="value: query, valueUpdate: 'keyup'">
 			<div class="listView">
-				<ul id="list" data-bind="foreach: filterPoints">
+				<ul id="list" data-bind="foreach: filterMarkers">
 					<li id ="listItem" data-bind= "click: listClick">
 						<h4 data-bind="text:name"></h4>
 					</li>
 				</ul>
+			</div>
+			<div id="dropDownMenu">
+				<select data-bind="options: points, optionsText: 'name', value: selected, optionsCaption: 'Select a location', event: {change: onChange}"></select>
+				<button data-bind="click: resetSelection">Reset</button>
 			</div>
 		</div>
 		<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuIMnFu96EbL8q8LJZtwbw-Bn78s8Ui3U&callback=initMap"></script>

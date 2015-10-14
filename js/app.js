@@ -1,5 +1,6 @@
 var markerList = ko.observableArray([]);
 var infowindow;
+var points = ko.observableArray([]);
 
 function initMap(){
   //Create map and set initial coordinates and zoom level
@@ -75,7 +76,7 @@ function initMap(){
   }; //End of Point function
 
    //Model with all points
-  var points = ko.observableArray ([
+  points = ko.observableArray ([
   new Point(this.Map, 'El Camino', 45.415597, -75.688027),
   new Point(this.Map, 'Nature Museum', 45.412999, -75.688523),
   new Point(this.Map, 'Shawarma Palace', 45.431761, -75.679836),
@@ -83,6 +84,11 @@ function initMap(){
   new Point(this.Map, 'Ottawa City Hall', 45.443206, -75.659874),
   new Point(this.Map, 'Canadian War Museum', 45.417355, -75.716931)
   ]);
+
+  for (i=0; i<markerList().length; i++) {
+        markerList()[i].setMap(this.Map);
+        
+  }
 }
 
 //Start viewModel
@@ -100,23 +106,17 @@ var viewModel = function(){
   //Filters list items and markers based on user input in the search bar
   self.filterMarkers = ko.computed(function () {
     var search  = self.query().toLowerCase();
-    if (!search) {
-      for (i=0; i<markerList().length; i++) {
-        markerList()[i].setMap(this.Map);
-        infowindow.close(this.Map);
-      }
-      return markerList();
-    } else {
     return ko.utils.arrayFilter(markerList(), function (marker) {
         var doesMatch = marker.name.toLowerCase().indexOf(search) >= 0;
         if (doesMatch){
           marker.setMap(this.Map);
         } else {
           marker.setMap(null);
+          infowindow.close(this.Map);
         }
         return doesMatch;
       });
-    }
+    
   });
   //End self.filterPoints
 

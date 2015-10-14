@@ -20,19 +20,15 @@ function initMap(){
   var Point = function (map, name, lat, lon) {
     var markerLat = lat;
     var markerLon = lon;
-    var markerName = name;
-
-    this.name = ko.observable(name);
-    this.lat  = ko.observable(lat);
-    this.lon  = ko.observable(lon);
 
     //Places a marker on the map
     marker = new google.maps.Marker({
       position: new google.maps.LatLng(lat, lon),
       animation: google.maps.Animation.DROP,
-      name: markerName
+      name: name
     });
 
+    this.marker = ko.observable(marker);
     //Pushes marker into an observable array
     markerList.push(marker);
 
@@ -46,7 +42,7 @@ function initMap(){
                   '&client_secret=VHTNW4NDFQSZACFPINV0OC2YEWAISSPXTOHY1UIOZIFVGDLO'+
                   '&v=20130815'+
                   '&ll=' + markerLat + ',' + markerLon +
-                  '&query=' + markerName,
+                  '&query=' + marker.name,
                 dataType: 'json',
                 success: function(response) {
                       var venue = response.response.venues[0];

@@ -18,8 +18,8 @@
 				</ul>
 			</div>
 			<div id="dropDownMenu">
-				<select data-bind="options: points, optionsText: 'name', value: selected, optionsCaption: 'Select a location', event: {change: onChange}"></select>
-				<button data-bind="click: resetSelection">Reset</button>
+				<select data-bind="options: markerList, optionsText: 'name', value: selected, optionsCaption: 'Select a location', event: {change: onChange}"></select>
+				<button id="resetButton" data-bind="click: resetSelection">Reset</button>
 			</div>
 		</div>
 		<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuIMnFu96EbL8q8LJZtwbw-Bn78s8Ui3U&callback=initMap"></script>

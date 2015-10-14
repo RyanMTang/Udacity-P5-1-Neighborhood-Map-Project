@@ -1,4 +1,5 @@
 var markerList = ko.observableArray([]);
+var infowindow;
 
 function initMap(){
   //Create map and set initial coordinates and zoom level
@@ -6,16 +7,16 @@ function initMap(){
     center: {lat: 45.4214, lng: -75.6919},
     zoom: 12,
   });
-  var center = self.Map.getCenter();
+  this.center = this.Map.getCenter();
   //Map resizes and centers when the window is resized
   google.maps.event.addDomListener(window, "resize", function() {
-    google.maps.event.trigger(self.Map, "resize");
-    self.Map.setCenter(center); 
+    google.maps.event.trigger(this.Map, "resize");
+    this.Map.setCenter(this.center); 
   });
 
-  this.infowindow = new google.maps.InfoWindow();
+  infowindow = new google.maps.InfoWindow();
   //Function for creating points at different locations on the map
-  var Point = function (map, name, lat, lon, id, marker) {
+  var Point = function (map, name, lat, lon, marker) {
     var markerLat = lat;
     var markerLon = lon;
     var markerName = name;
@@ -23,7 +24,6 @@ function initMap(){
     this.name = ko.observable(name);
     this.lat  = ko.observable(lat);
     this.lon  = ko.observable(lon);
-    this.marker = ko.observable(marker);
 
     //Places a marker on the map
     marker = new google.maps.Marker({
@@ -75,7 +75,7 @@ function initMap(){
   }; //End of Point function
 
    //Model with all points
-  points = ko.observableArray ([
+  var points = ko.observableArray ([
   new Point(this.Map, 'El Camino', 45.415597, -75.688027),
   new Point(this.Map, 'Nature Museum', 45.412999, -75.688523),
   new Point(this.Map, 'Shawarma Palace', 45.431761, -75.679836),
@@ -98,7 +98,7 @@ var viewModel = function(){
   self.query = ko.observable('');
 
   //Filters list items and markers based on user input in the search bar
-  self.filterPoints = ko.computed(function () {
+  self.filterMarkers = ko.computed(function () {
     var search  = self.query().toLowerCase();
     if (!search) {
       for (i=0; i<markerList().length; i++) {
@@ -133,19 +133,19 @@ var viewModel = function(){
   //Pulls up the info window for the point selected in the drop down menu
   //Puts the markers back on the map if the drop down menu value is null
   self.onChange = function() {
-      var position = self.points().indexOf(self.selected()); 
-      if (self.selected()==null) {
-
+      var position = markerList().indexOf(self.selected()); 
+      if (!self.selected()) {
         for (var i = 0; i < markerList().length; i++ ) {
-        markerList()[i].setMap(self.Map);
-        infowindow.close(self.Map, markerList()[i]);
-        self.Map.setCenter(center); 
+          markerList()[i].setMap(this.Map);
+          infowindow.close(this.Map);
+          this.Map.setCenter(center); 
         }
         return;
+      } else {
+        clearOverlays();
+        markerList()[position].setMap(this.Map);
+        google.maps.event.trigger(markerList()[position], 'click'); 
       }
-      clearOverlays();
-      markerList()[position].setMap(self.Map);
-      google.maps.event.trigger(markerList()[position], 'click'); 
   };
 
   //Reset button that sets the value for the drop down menu to null

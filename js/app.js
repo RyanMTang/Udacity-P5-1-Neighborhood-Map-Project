@@ -17,7 +17,7 @@ function initMap(){
 
   infowindow = new google.maps.InfoWindow();
   //Function for creating points at different locations on the map
-  var Point = function (map, name, lat, lon, marker) {
+  var Point = function (map, name, lat, lon) {
     var markerLat = lat;
     var markerLon = lon;
     var markerName = name;
@@ -109,9 +109,9 @@ var viewModel = function(){
     return ko.utils.arrayFilter(markerList(), function (marker) {
         var doesMatch = marker.name.toLowerCase().indexOf(search) >= 0;
         if (doesMatch){
-          marker.setMap(this.Map);
+          marker.setVisible(true);
         } else {
-          marker.setMap(null);
+          marker.setVisible(false);
           infowindow.close(this.Map);
         }
         return doesMatch;
